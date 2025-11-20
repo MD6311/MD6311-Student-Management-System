@@ -1,0 +1,104 @@
+@model IEnumerable<StudentManagement.Models.Student>
+@{
+    ViewData["Title"] = "Students List";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-people-fill"></i> Student Management</h2>
+    <div>
+        <a asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Add New Student
+        </a>
+        <a asp-action="ExportCsv" class="btn btn-info text-white">
+            <i class="bi bi-download"></i> Export CSV
+        </a>
+    </div>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill"></i> @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" asp-action="Index" class="row g-3">
+            <div class="col-md-10">
+                <input type="text" name="q" value="@ViewBag.Query" class="form-control form-control-lg"
+                       placeholder="?? Search by name, enrollment no, or email...">
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary btn-lg w-100">
+                    <i class="bi bi-search"></i> Search
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (Model.Any())
+{
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Name</th>
+                            <th>Enrollment No</th>
+                            <th>Semester</th>
+                            <th>Field</th>
+                            <th>Mobile</th>
+                            <th>Institute Email</th>
+                            <th width="220">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var student in Model)
+                        {
+                            <tr>
+                                <td><strong>@student.Name</strong></td>
+                                <td>@student.EnrollmentNo</td>
+                                <td><span class="badge bg-primary">Sem @student.Semester</span></td>
+                                <td>@student.Field</td>
+                                <td>@student.Mobile</td>
+                                <td>@student.InstituteEmail</td>
+                                <td>
+                                    <a asp-action="Details" asp-route-id="@student.Id" class="btn btn-info btn-sm" title="View Details">
+                                        <i class="bi bi-eye-fill"></i>
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@student.Id" class="btn btn-warning btn-sm" title="Edit">
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@student.Id" class="btn btn-danger btn-sm" title="Delete">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer text-muted">
+            Total Students: <strong>@Model.Count()</strong>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-info text-center">
+        <i class="bi bi-info-circle-fill"></i> No students found.
+        @if (string.IsNullOrEmpty(ViewBag.Query))
+        {
+            <a asp-action="Create" class="alert-link">Add your first student</a>
+        }
+        else
+        {
+            <a asp-action="Index" class="alert-link">Clear search</a>
+        }
+    </div>
+}

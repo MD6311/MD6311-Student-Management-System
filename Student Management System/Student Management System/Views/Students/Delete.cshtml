@@ -1,0 +1,61 @@
+@model StudentManagement.Models.Student
+@{
+    ViewData["Title"] = "Delete Student";
+}
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <h2 class="text-danger mb-4">
+            <i class="bi bi-trash-fill"></i> Delete Student
+        </h2>
+
+        <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">
+                <i class="bi bi-exclamation-triangle-fill"></i> Are you sure you want to delete this student?
+            </h4>
+            <p class="mb-0">This action cannot be undone!</p>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">Student Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Name:</strong> @Model.Name</p>
+                        <p><strong>Enrollment No:</strong> @Model.EnrollmentNo</p>
+                        <p><strong>Semester:</strong> @Model.Semester</p>
+                        <p><strong>Field:</strong> @Model.Field</p>
+                        <p><strong>GR Number:</strong> @Model.GRNumber</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Mobile:</strong> @Model.Mobile</p>
+                        <p><strong>Institute Email:</strong> @Model.InstituteEmail</p>
+                        <p><strong>Personal Email:</strong> @Model.PersonalEmail</p>
+                        <p><strong>Address:</strong> @Model.Address</p>
+                        <p><strong>DOB:</strong> @Model.DOB.ToString("yyyy-MM-dd")</p>
+                    </div>
+                </div>
+                @if (!string.IsNullOrEmpty(Model.Notes))
+                {
+                    <hr>
+                    <p><strong>Notes:</strong></p>
+                    <p>@Model.Notes</p>
+                }
+            </div>
+        </div>
+
+        <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+            @Html.AntiForgeryToken()
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-danger btn-lg">
+                    <i class="bi bi-trash-fill"></i> Yes, Delete This Student
+                </button>
+                <a asp-action="Index" class="btn btn-secondary btn-lg">
+                    <i class="bi bi-x-circle"></i> No, Keep Student
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
